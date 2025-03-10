@@ -4,7 +4,7 @@
 Este proyecto es una aplicación basada en microservicios desarrollada con Java Spring Boot, utilizando JPA para la gestión de base de datos y Docker para la contenerización. Expone una API REST para gestionar clientes y sus movimientos financieros.
 
 ## Tecnologías Utilizadas
-- **Java 17**
+- **Java 21**
 - **Spring Boot 3**
 - **Spring Data JPA**
 - **PostgreSQL**
