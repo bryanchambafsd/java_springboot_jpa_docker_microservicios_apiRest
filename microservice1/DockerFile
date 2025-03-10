@@ -1,0 +1,28 @@
+#
+# Etapa de construcción
+#
+FROM maven:3.9.5-amazoncorretto-21 AS builder
+
+WORKDIR /app
+
+# Copiar los archivos de Maven
+COPY pom.xml .
+COPY src ./src
+
+# Ejecutar el build (para crea el .jar)
+RUN mvn clean install -DskipTests
+
+#
+# Etapa de ejecución
+#
+FROM azul/zulu-openjdk:21
+
+WORKDIR /app
+
+# Copiar el archivo .jar desde la etapa anterior
+COPY --from=builder /app/target/microservice-persons-clientes.jar /app/app.jar
+
+EXPOSE 9090
+
+# Ejecutar el .jar
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

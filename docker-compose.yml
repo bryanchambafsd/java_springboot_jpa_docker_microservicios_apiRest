@@ -1,0 +1,44 @@
+services:
+    db:
+        container_name: java_db
+        image: postgres:latest
+        restart: always
+        environment:
+            - POSTGRES_DB=prueba
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        ports:
+            - "5436:5432"
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+            - ./BaseDatos.sql:/docker-entrypoint-initdb.d/BaseDatos.sql
+    java-app-cliente:
+        container_name: java_app_clientes
+       
+        build:
+            context: ./microservice1
+            dockerfile: DockerFile
+        depends_on:
+            - db
+        ports:
+            - "9090:8080"
+        environment:
+            DATABASE_URL: jdbc:postgresql://db:5432/prueba
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+    java-app-movimiento:
+        container_name: java_app_movimientos
+       
+        build:
+            context: ./microservice2
+            dockerfile: DockerFile
+        depends_on:
+            - db
+        ports:
+            - "9191:8080"
+        environment:
+            DATABASE_URL: jdbc:postgresql://db:5432/prueba
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+volumes:
+    pgdata:
